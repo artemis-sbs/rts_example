@@ -1,4 +1,5 @@
 
+from lib.sbs_utils.spaceobject import SpaceObject
 import sbs
 import lib.sbs_utils.scatter as scatter
 from harvester import Harvester, ResourceAsteroid
@@ -72,8 +73,6 @@ class Mission:
         Mission.add_asteroids(sim, scatter.sphere(50, -2000,0,2000, 200, 800, ring=True), "sphere-Ring")
         Mission.add_asteroids(sim, scatter.rect_fill(5,5,  2000,0, 4000, 500, 500, True), "Grid")
         Mission.add_asteroids(sim, scatter.box_fill(5,5,5,  -2000, 0, 4000, 500, 500,500), "Box")
-
-        
         
 
 def HandlePresentGUI(sim):

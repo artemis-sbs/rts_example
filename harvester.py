@@ -64,7 +64,7 @@ class Harvester(SpaceObject, MSpawnActive, MCommunications):
 
     def find_target(self, sim):
         if self.state == HarvesterState.HARVESTING:
-            self.target_closest(sim,ResourceAsteroid, filter_func=self.filter_res)
+            self.target_closest(sim,'ResourceAsteroid', filter_func=self.filter_res)
         elif self.state == HarvesterState.FULL_WAITING:
             self.clear_target(sim)
             self.comms_selected(sim, 0) ## THIS IS THE WRONG PLAYER ID
@@ -113,7 +113,7 @@ class Harvester(SpaceObject, MSpawnActive, MCommunications):
             sbs.send_comms_button_info(player_id, "green", "Harvest replicator fuel", "get_food")
 
         if self.state == HarvesterState.FULL_WAITING:
-            for base in self.find_close_list(sim, Spacedock):
+            for base in self.find_close_list(sim, 'Spacedock'):
                 sbs.send_comms_button_info(player_id, "yellow", f"Head to {base.obj.comms_id}", f"{base.obj.id}")
 
 

@@ -10,4 +10,3 @@ It creates a 'Harvester' that gathers resources from asteroids and takes them to
 
 The station can then use those resources to build things.
 
-
