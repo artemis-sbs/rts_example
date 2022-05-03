@@ -26,8 +26,8 @@ class Harvester(SpaceObject, MSpawnActive, MCommunications):
         self.state = HarvesterState.UNKNOWN
         self.resource_type = ResourceTypes.ENERGY
         
-    def spawn(self, sim, x: float, y: float ,z: float, side):
-        ship = super().spawn(sim,x,y,z, None, side,  "Cargo", "behav_npcship")
+    def spawn(self, sim, v, side):
+        ship = super().spawn_v(sim,v, None, side,  "Cargo", "behav_npcship")
         self.comms_id = f"{side} {self.id}"
         DamageDispatcher.add_source(self.id, self.on_damage_source)
         self.enable_comms(f"ter #964b00 8 1;ter #968b00 3 0;ter #968b00 4 0;ter #968b00 5 2;ter #fff 3 5;ter #964b00 8 4;")

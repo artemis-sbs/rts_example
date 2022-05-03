@@ -23,8 +23,8 @@ class Spacedock(SpaceObject, MSpawnActive, MCommunications):
             ResourceTypes.FOOD: 0,
         }
 
-    def spawn(self, sim, x, y, z, side):
-        super().spawn(sim,x,y,z,self.comms_id, side, "Starbase", "behav_station",)
+    def spawn(self, sim, v, side):
+        super().spawn_v(sim,v,self.comms_id, side, "Starbase", "behav_station",)
         self.enable_comms()
     
     def deposit_storage(self, resource: ResourceTypes, amount: int):

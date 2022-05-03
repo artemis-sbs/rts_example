@@ -32,7 +32,7 @@ class ResourceAsteroid(SpaceObject, MSpawnPassive):
         self.amount = randint(1000,15000)
         self.resource_type = ResourceTypes(r)
 
-    def spawn(self, sim, x, y, z):
-        return super().spawn(sim, x,y,z, None, None, f"Asteroid {self.art}", "behav_asteroid")
+    def spawn(self, sim, v):
+        return super().spawn_v(sim, v, None, None, f"Asteroid {self.art}", "behav_asteroid")
         
         
