@@ -102,9 +102,9 @@ class Harvester(SpaceObject, MSpawnActive, MCommunications):
 
 
     def comms_selected(self, sim, player_id):
-        # if Empty it is waiting for what to harvest
         sbs.send_comms_selection_info(player_id, self.face_desc, "green", self.comms_id)
         
+        # if Empty it is waiting for what to harvest
         if self.state == HarvesterState.EMPTY_WAITING:
             sbs.send_comms_button_info(player_id, "blue", "Harvest energy", "get_energy")
             sbs.send_comms_button_info(player_id, "red", "Harvest minerals", "get_mineral")

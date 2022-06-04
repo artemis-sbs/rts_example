@@ -1,3 +1,4 @@
+from lib.sbs_utils.spaceobject import MSpawnActive, SpaceObject
 import sbs
 import lib.sbs_utils.scattervec as scattervec
 from harvester import Harvester, ResourceAsteroid
@@ -36,6 +37,8 @@ class GuiMain:
                 sbs.resume_sim()
                 Mission.start(sim)
 
+class Enemy(SpaceObject, MSpawnActive):
+    pass
 
 
 class Mission:
@@ -55,6 +58,8 @@ class Mission:
   
         v = Vec3(0,0,0)
         Player().spawn_v(sim, v, "Artemis", "TSN", "Battle Cruiser")
+        
+        Enemy().spawn_v(sim, Vec3(1000,0,100),"BAD GUY", "WTF", "Leviathan", "behav_npcship")
 
         Harvester().spawn(sim, Vec3(700,0,0), "TSN")
         Harvester().spawn(sim, Vec3(-700,0,0), "TSN")
