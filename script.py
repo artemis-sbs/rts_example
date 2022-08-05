@@ -3,6 +3,7 @@ import sbs
 import lib.sbs_utils.scattervec as scattervec
 from harvester import Harvester, ResourceAsteroid
 from lib.sbs_utils.vec import Vec3
+from lib.sbs_utils.gui import Gui
 from spacedock import Spacedock
 from player import Player
 
@@ -12,22 +13,22 @@ class GuiMain:
     def __init__(self) -> None:
         self.gui_state = 'options'
 
-    def present(self, sim):
+    def present(self, sim, CID):
         match self.gui_state:
             case  "sim_on":
                 self.gui_state = "blank"
-                sbs.send_gui_clear(0)
+                sbs.send_gui_clear(CID)
 
             case  "options":
-                sbs.send_gui_clear(0)
+                sbs.send_gui_clear(CID)
                 # Setting this to a state we don't process
                 # keeps the existing GUI displayed
                 self.gui_state = "presenting"
                 sbs.send_gui_text(
-                    0, "Mission: SBS_Example.^^This is an Example starter project", "text", 25, 30, 99, 90)
-                sbs.send_gui_button(0, "Start Mission", "start", 80, 95, 99, 99)
+                    CID, "Mission: SBS_Example.^^This is an Example starter project", "text", 25, 30, 99, 90)
+                sbs.send_gui_button(CID, "Start Mission", "start", 80, 95, 99, 99)
 
-    def on_message(self, sim, message_tag, clientID):
+    def on_message(self, sim, message_tag, clientID, _):
         match message_tag:
             case "continue":
                 self.gui_state = "blank"
@@ -42,8 +43,6 @@ class Enemy(SpaceObject, MSpawnActive):
 
 
 class Mission:
-    main = GuiMain()
-
     def add_asteroids(sim, g, name):
         landmark = None
         for v in g:
@@ -78,13 +77,7 @@ class Mission:
         Mission.add_asteroids(sim, scattervec.sphere(50, Vec3(-2000,0,2000), 200, 800, ring=True), "sphere-Ring")
         Mission.add_asteroids(sim, scattervec.rect_fill(5,5, Vec3(2000,0, 4000), 500, 500, True), "Grid")
         Mission.add_asteroids(sim, scattervec.box_fill(5,5,5,  Vec3(-2000, 0, 4000), 500, 500,500), "Box")
-        
-
-def HandlePresentGUI(sim):
-    Mission.main.present(sim)
-
-def HandlePresentGUIMessage(sim, message_tag, clientID):
-    Mission.main.on_message(sim, message_tag, clientID)
 
 
+Gui.server_start_page_class(GuiMain)
 
