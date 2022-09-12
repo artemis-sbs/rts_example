@@ -1,8 +1,8 @@
 from enum import IntEnum
-from lib.sbs_utils.spaceobject import SpaceObject, MSpawnActive
-from lib.sbs_utils.damagedispatcher import DamageDispatcher
-from lib.sbs_utils.consoledispatcher import MCommunications
-from lib.sbs_utils.tickdispatcher import TickDispatcher
+from sbs_utils.spaceobject import SpaceObject, MSpawnActive
+from sbs_utils.damagedispatcher import DamageDispatcher
+from sbs_utils.consoledispatcher import MCommunications
+from sbs_utils.tickdispatcher import TickDispatcher
 from spacedock import Spacedock
 from resourceasteroid import ResourceTypes, ResourceAsteroid
 
@@ -35,7 +35,7 @@ class Harvester(SpaceObject, MSpawnActive, MCommunications):
         return ship
 
     def on_damage_source(self, sim, damage_event):
-        roid = SpaceObject.get_as(damage_event.target_id, ResourceAsteroid)
+        roid = SpaceObject.get_as(damage_event.selected_id, ResourceAsteroid)
 
         if roid is None:
             # not targeting an asteroid
@@ -67,7 +67,7 @@ class Harvester(SpaceObject, MSpawnActive, MCommunications):
             self.target_closest(sim,'ResourceAsteroid', filter_func=self.filter_res)
         elif self.state == HarvesterState.FULL_WAITING:
             self.clear_target(sim)
-            self.comms_selected(sim, 0) ## THIS IS THE WRONG PLAYER ID
+            self.comms_selected(sim, 0, None) ## THIS IS THE WRONG PLAYER ID
 
     def filter_res(self, other):
         if not isinstance(other[1], ResourceAsteroid):
@@ -101,7 +101,7 @@ class Harvester(SpaceObject, MSpawnActive, MCommunications):
                     f"Empty", "status")
 
 
-    def comms_selected(self, sim, player_id):
+    def comms_selected(self, sim, player_id, _):
         sbs.send_comms_selection_info(player_id, self.face_desc, "green", self.comms_id)
         
         # if Empty it is waiting for what to harvest
@@ -112,12 +112,13 @@ class Harvester(SpaceObject, MSpawnActive, MCommunications):
             sbs.send_comms_button_info(player_id, "silver", "Harvest alloys", "get_alloy")
             sbs.send_comms_button_info(player_id, "green", "Harvest replicator fuel", "get_food")
 
+
         if self.state == HarvesterState.FULL_WAITING:
             for base in self.find_close_list(sim, 'Spacedock'):
                 sbs.send_comms_button_info(player_id, "yellow", f"Head to {base.obj.comms_id}", f"{base.obj.id}")
 
 
-    def comms_message(self, sim, message, player_id):
+    def comms_message(self, sim, message, player_id, _):
 
         if message.isnumeric():
                 other_id = int(message)

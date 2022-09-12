@@ -1,7 +1,8 @@
-from lib.sbs_utils.spaceobject import SpaceObject
+
+from sbs_utils.spaceobject import SpaceObject
 from resourceasteroid import ResourceTypes
-from lib.sbs_utils.consoledispatcher import MCommunications
-from lib.sbs_utils.spaceobject import MSpawnActive
+from sbs_utils.consoledispatcher import MCommunications
+from sbs_utils.spaceobject import MSpawnActive
 import sbs
 
 
@@ -37,7 +38,7 @@ class Spacedock(SpaceObject, MSpawnActive, MCommunications):
         return False
 
 
-    def comms_selected(self, sim, player_id):
+    def comms_selected(self, sim, player_id, _):
         # if Empty it is waiting for what to harvest
         sbs.send_comms_selection_info(player_id, self.face_desc, "green", self.comms_id)
 
@@ -46,7 +47,7 @@ class Spacedock(SpaceObject, MSpawnActive, MCommunications):
         sbs.send_comms_button_info(player_id, "gold", "Build Harvester 10kA , 10kR", "havester")
 
 
-    def comms_message(self, sim, message, player_id):
+    def comms_message(self, sim, message, player_id, _):
         
         match message:
             case "status":

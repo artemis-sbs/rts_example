@@ -1,41 +1,47 @@
-from lib.sbs_utils.spaceobject import MSpawnActive, SpaceObject
+import sbslibs
+from sbs_utils.spaceobject import MSpawnActive, SpaceObject
 import sbs
-import lib.sbs_utils.scattervec as scattervec
+import sbs_utils.scattervec as scattervec
 from harvester import Harvester, ResourceAsteroid
-from lib.sbs_utils.vec import Vec3
-from lib.sbs_utils.gui import Gui
+from sbs_utils.vec import Vec3
+from sbs_utils.gui import Gui, Page
 from spacedock import Spacedock
 from player import Player
 
-from lib.sbs_utils.handlerhooks import *
 
-class GuiMain:
+from sbs_utils.handlerhooks import *
+
+class GuiMain(Page):
     def __init__(self) -> None:
         self.gui_state = 'options'
 
-    def present(self, sim, CID):
+    def present(self, sim, event):
         match self.gui_state:
             case  "sim_on":
                 self.gui_state = "blank"
-                sbs.send_gui_clear(CID)
+                sbs.send_gui_clear(event.client_id)
 
             case  "options":
-                sbs.send_gui_clear(CID)
+                sbs.send_gui_clear(event.client_id)
                 # Setting this to a state we don't process
                 # keeps the existing GUI displayed
                 self.gui_state = "presenting"
                 sbs.send_gui_text(
-                    CID, "Mission: SBS_Example.^^This is an Example starter project", "text", 25, 30, 99, 90)
-                sbs.send_gui_button(CID, "Start Mission", "start", 80, 95, 99, 99)
+                    event.client_id, "Mission: SBS_Example.^^This is an Example starter project", "text", 25, 30, 99, 90)
+                sbs.send_gui_button(event.client_id, "Start Mission", "start", 80, 95, 99, 99)
 
-    def on_message(self, sim, message_tag, clientID, _):
-        match message_tag:
+    def on_pop(self, sim):
+        self.gui_state = "options"
+
+    def on_message(self, sim, event):
+        match event.sub_tag:
             case "continue":
-                self.gui_state = "blank"
+                self.gui_state = 'options'
 
             case "start":
                 sbs.create_new_sim()
                 sbs.resume_sim()
+                
                 Mission.start(sim)
 
 class Enemy(SpaceObject, MSpawnActive):
@@ -80,4 +86,5 @@ class Mission:
 
 
 Gui.server_start_page_class(GuiMain)
+
 

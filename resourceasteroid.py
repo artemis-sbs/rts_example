@@ -1,6 +1,6 @@
 from enum import IntEnum
 from random import randint
-from lib.sbs_utils.spaceobject import SpaceObject, MSpawnPassive
+from sbs_utils.spaceobject import SpaceObject, MSpawnPassive
 
 class ResourceTypes(IntEnum):
     DIRT = 0
