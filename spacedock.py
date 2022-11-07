@@ -1,13 +1,12 @@
 
-from sbs_utils.spaceobject import SpaceObject
+from sbs_utils.objects import Npc
 from resourceasteroid import ResourceTypes
 from sbs_utils.consoledispatcher import MCommunications
-from sbs_utils.spaceobject import MSpawnActive
 import sbs
 
 
 
-class Spacedock(SpaceObject, MSpawnActive, MCommunications):
+class Spacedock(Npc,MCommunications):
     ds_id = 0
 
     def __init__(self):

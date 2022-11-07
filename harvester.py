@@ -1,5 +1,6 @@
 from enum import IntEnum
-from sbs_utils.spaceobject import SpaceObject, MSpawnActive
+from sbs_utils.objects import Npc
+from sbs_utils.spaceobject import SpaceObject
 from sbs_utils.damagedispatcher import DamageDispatcher
 from sbs_utils.consoledispatcher import MCommunications
 from sbs_utils.tickdispatcher import TickDispatcher
@@ -19,7 +20,7 @@ class HarvesterState(IntEnum):
     RETURNING = 6
     EMPTYING = 7
 
-class Harvester(SpaceObject, MSpawnActive, MCommunications):
+class Harvester(Npc, MCommunications):
     def __init__(self):
         self.amount = 0
         self.storage = 4000
@@ -169,3 +170,5 @@ class Harvester(SpaceObject, MSpawnActive, MCommunications):
                     self.face_desc, self.comms_id, 
                     message, 
                     "harvester")
+
+

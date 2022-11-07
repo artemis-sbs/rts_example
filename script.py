@@ -1,5 +1,5 @@
 import sbslibs
-from sbs_utils.spaceobject import MSpawnActive, SpaceObject
+from sbs_utils.objects import Npc
 import sbs
 import sbs_utils.scattervec as scattervec
 from harvester import Harvester, ResourceAsteroid
@@ -7,44 +7,13 @@ from sbs_utils.vec import Vec3
 from sbs_utils.gui import Gui, Page
 from spacedock import Spacedock
 from player import Player
+from sbs_utils.pages.start import ClientSelectPage, StartPage
 
 
 from sbs_utils.handlerhooks import *
 
-class GuiMain(Page):
-    def __init__(self) -> None:
-        self.gui_state = 'options'
 
-    def present(self, sim, event):
-        match self.gui_state:
-            case  "sim_on":
-                self.gui_state = "blank"
-                sbs.send_gui_clear(event.client_id)
-
-            case  "options":
-                sbs.send_gui_clear(event.client_id)
-                # Setting this to a state we don't process
-                # keeps the existing GUI displayed
-                self.gui_state = "presenting"
-                sbs.send_gui_text(
-                    event.client_id, "Mission: SBS_Example.^^This is an Example starter project", "text", 25, 30, 99, 90)
-                sbs.send_gui_button(event.client_id, "Start Mission", "start", 80, 95, 99, 99)
-
-    def on_pop(self, sim):
-        self.gui_state = "options"
-
-    def on_message(self, sim, event):
-        match event.sub_tag:
-            case "continue":
-                self.gui_state = 'options'
-
-            case "start":
-                sbs.create_new_sim()
-                sbs.resume_sim()
-                
-                Mission.start(sim)
-
-class Enemy(SpaceObject, MSpawnActive):
+class Enemy(Npc):
     pass
 
 
@@ -59,8 +28,11 @@ class Mission:
                 landmark = sim.add_navpoint(v.x, v.y+100,v.z, name, "yellow");
 
 
-    def start(sim):
-  
+    def start(sim, _):
+        sbs.create_new_sim()
+        sbs.resume_sim()
+        
+              
         v = Vec3(0,0,0)
         Player().spawn_v(sim, v, "Artemis", "TSN", "Battle Cruiser")
         
@@ -85,6 +57,10 @@ class Mission:
         Mission.add_asteroids(sim, scattervec.box_fill(5,5,5,  Vec3(-2000, 0, 4000), 500, 500,500), "Box")
 
 
-Gui.server_start_page_class(GuiMain)
+def start_page():
+    return StartPage("Mission: SBS_Example.^^This is an Example starter project", Mission.start)
+
+Gui.server_start_page_class(start_page)
+Gui.client_start_page_class(ClientSelectPage)
 
 
