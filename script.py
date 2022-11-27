@@ -32,9 +32,11 @@ class Mission:
         sbs.create_new_sim()
         sbs.resume_sim()
         
+        
               
         v = Vec3(0,0,0)
-        Player().spawn_v(sim, v, "Artemis", "TSN", "Battle Cruiser")
+        player = Player().spawn_v(sim, v, "Artemis", "TSN", "Battle Cruiser")
+        sbs.assign_client_to_ship(0, player.id)
         
         Enemy().spawn_v(sim, Vec3(1000,0,100),"BAD GUY", "WTF", "Leviathan", "behav_npcship")
 
@@ -59,6 +61,7 @@ class Mission:
 
 def start_page():
     return StartPage("Mission: SBS_Example.^^This is an Example starter project", Mission.start)
+
 
 Gui.server_start_page_class(start_page)
 Gui.client_start_page_class(ClientSelectPage)
