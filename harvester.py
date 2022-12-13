@@ -22,6 +22,7 @@ class HarvesterState(IntEnum):
 
 class Harvester(Npc, MCommunications):
     def __init__(self):
+        super().__init__()
         self.amount = 0
         self.storage = 4000
         self.state = HarvesterState.UNKNOWN
@@ -29,7 +30,7 @@ class Harvester(Npc, MCommunications):
         
     def spawn(self, sim, v, side):
         ship = super().spawn_v(sim,v, None, side,  "Cargo", "behav_npcship")
-        self.comms_id = f"{side} {self.id}"
+        #self.comms_id = f"{side} {self.id}"
         DamageDispatcher.add_source(self.id, self.on_damage_source)
         self.enable_comms(f"ter #964b00 8 1;ter #968b00 3 0;ter #968b00 4 0;ter #968b00 5 2;ter #fff 3 5;ter #964b00 8 4;")
         self.state = HarvesterState.EMPTY_WAITING
@@ -71,11 +72,11 @@ class Harvester(Npc, MCommunications):
             self.comms_selected(sim, 0, None) ## THIS IS THE WRONG PLAYER ID
 
     def filter_res(self, other):
-        if not isinstance(other[1], ResourceAsteroid):
+        if not isinstance(other, ResourceAsteroid):
             return False
-        if other[1].amount <= 0:
+        if other.amount <= 0:
             return False
-        return other[1].resource_type == self.resource_type
+        return other.resource_type == self.resource_type
 
     def think(self, sim, task):
         if self.state == HarvesterState.RETURNING:
@@ -116,7 +117,7 @@ class Harvester(Npc, MCommunications):
 
         if self.state == HarvesterState.FULL_WAITING:
             for base in self.find_close_list(sim, 'Spacedock'):
-                sbs.send_comms_button_info(player_id, "yellow", f"Head to {base.obj.comms_id}", f"{base.obj.id}")
+                sbs.send_comms_button_info(player_id, "yellow", f"Head to {base.py_object.comms_id}", f"{base.py_object.id}")
 
 
     def comms_message(self, sim, message, player_id, _):

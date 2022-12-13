@@ -14,7 +14,7 @@ class Spacedock(Npc,MCommunications):
 
         Spacedock.ds_id += 1
         self.ds_id = Spacedock.ds_id
-        self.comms_id =  f"DS {self.ds_id}"
+        #self.comms_id =  f"DS {self.ds_id}"
         self.storage = {
             ResourceTypes.ENERGY: 0,
             ResourceTypes.MINERAL: 0,
@@ -24,7 +24,7 @@ class Spacedock(Npc,MCommunications):
         }
 
     def spawn(self, sim, v, side):
-        super().spawn_v(sim,v,self.comms_id, side, "Starbase", "behav_station",)
+        super().spawn_v(sim,v, f"DS {self.ds_id}", side, "Starbase", "behav_station",)
         self.enable_comms()
     
     def deposit_storage(self, resource: ResourceTypes, amount: int):
