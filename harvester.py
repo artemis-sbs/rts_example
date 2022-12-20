@@ -6,7 +6,7 @@ from sbs_utils.consoledispatcher import MCommunications
 from sbs_utils.tickdispatcher import TickDispatcher
 from spacedock import Spacedock
 from resourceasteroid import ResourceTypes, ResourceAsteroid
-
+from sbs_utils.query import closest, target, role, clear_target
 import sbs
 
 
@@ -66,18 +66,12 @@ class Harvester(Npc, MCommunications):
 
     def find_target(self, sim):
         if self.state == HarvesterState.HARVESTING:
-            self.target_closest(sim,'ResourceAsteroid', filter_func=self.filter_res)
+            target(sim, self, closest(self, role(self.resource_type.name)))
         elif self.state == HarvesterState.FULL_WAITING:
-            self.clear_target(sim)
+            clear_target(sim, self)
             self.comms_selected(sim, 0, None) ## THIS IS THE WRONG PLAYER ID
 
-    def filter_res(self, other):
-        if not isinstance(other, ResourceAsteroid):
-            return False
-        if other.amount <= 0:
-            return False
-        return other.resource_type == self.resource_type
-
+    
     def think(self, sim, task):
         if self.state == HarvesterState.RETURNING:
             test = sbs.distance_id(self.id, task.base_id)
