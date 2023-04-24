@@ -1,3 +1,3 @@
-Example
+010 Example
 A resource harvester found in many RTS games
 58 #48f
