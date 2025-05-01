@@ -1,6 +1,6 @@
 name: Feature Request
 description: Request a new feature.
-title: "[]: "
+title: "[feature]: "
 labels: ["enhancement", "triage"]
 # /3 is LegendaryMissions
 # /2 is Artemis Cosmos i.e. Engine
