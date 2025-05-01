@@ -2,7 +2,10 @@ name: Crash Report
 description: Report a Crash.
 title: "[crash]: "
 labels: ["bug", "triage"]
-projects: ["artemis-sbs/1", "octo-org/44"]
+# /3 is LegendaryMissions
+# /2 is Artemis Cosmos i.e. Engine
+# /7 is SBS Library
+projects: ["artemis-sbs/9"]
 body:
   - type: markdown
     attributes:
@@ -28,6 +31,8 @@ body:
       options:
         - v1.0.6
         - v1.0.1
+    validations:
+      required: true
   - type: textarea
     id: what-happened
     attributes:
@@ -41,5 +46,5 @@ body:
     id: details
     attributes:
       label: Other details what mission, setup, etc. 
-      description: Please enter any other details, including what mission, number of clients etc.
-       
+      description: Please enter any other details, including what mission, he operating system, hardware, game modes and difficulty settings, number of clients, type of ships, timing of events, etc.
+
